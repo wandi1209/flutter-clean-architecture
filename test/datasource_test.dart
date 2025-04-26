@@ -7,5 +7,7 @@ void main() async {
   profileRemoteDataSourceImplementation =
       ProfileRemoteDataSourceImplementation();
   var response = await profileRemoteDataSourceImplementation.getAllUser(2);
-  print(response);
+  for (var element in response) {
+    print(element.toJson());
+  }
 }

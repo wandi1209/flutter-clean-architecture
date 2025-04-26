@@ -14,7 +14,7 @@ class ProfileModel extends Profile {
   }) : super(fullName: "$firstName $lastName", profileUrl: avatar);
 
   factory ProfileModel.fromJson(Map<String, dynamic> dataJson) {
-    Map<String, dynamic> data = dataJson["data"];
+    Map<String, dynamic> data = dataJson;
     return ProfileModel(
       id: data["id"],
       email: data["email"],

@@ -33,4 +33,9 @@ class ProfileModel extends Profile {
       "avatar": avatar,
     };
   }
+
+  static List<ProfileModel> fromJsonList(List data) {
+    if (data.isEmpty) return [];
+    return data.map((e) => ProfileModel.fromJson(e)).toList();
+  }
 }

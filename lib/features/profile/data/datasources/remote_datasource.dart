@@ -19,8 +19,11 @@ class ProfileRemoteDataSourceImplementation extends ProfileRemoteDatasource {
   }
 
   @override
-  Future<ProfileModel> getUserById(int id) {
-    // TODO: implement getUserById
-    throw UnimplementedError();
+  Future<ProfileModel> getUserById(int id) async {
+    final url = "https://reqres.in/api/users/$id";
+    var response = await dio.get(url);
+
+    final data = response.data["data"];
+    return ProfileModel.fromJson(data);
   }
 }

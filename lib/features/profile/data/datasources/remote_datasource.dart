@@ -1,5 +1,7 @@
+import 'package:clean_architecture/core/errors/exception.dart';
 import 'package:clean_architecture/features/profile/data/models/profile_model.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 abstract class ProfileRemoteDatasource {
   Future<List<ProfileModel>> getAllUser(int page);
@@ -7,23 +9,44 @@ abstract class ProfileRemoteDatasource {
 }
 
 class ProfileRemoteDataSourceImplementation extends ProfileRemoteDatasource {
-  final dio = Dio();
+  final Dio dio;
+
+  ProfileRemoteDataSourceImplementation()
+    : dio = Dio(
+        BaseOptions(
+          baseUrl: "https://reqres.in/api",
+          headers: {"x-api-key": dotenv.env["API_KEY"]},
+          validateStatus: (status) {
+            return status! < 500;
+          },
+        ),
+      );
 
   @override
   Future<List<ProfileModel>> getAllUser(int page) async {
-    final url = "https://reqres.in/api/users?page=$page";
-    var response = await dio.get(url);
+    var response = await dio.get("/users?page=$page");
 
-    final List data = response.data["data"];
-    return ProfileModel.fromJsonList(data);
+    if (response.statusCode == 200) {
+      final List data = response.data["data"];
+      return ProfileModel.fromJsonList(data);
+    } else if (response.statusCode == 404) {
+      throw EmptyException(message: "Data not found - Error 404");
+    } else {
+      throw GeneralException(message: "Cannot get data");
+    }
   }
 
   @override
   Future<ProfileModel> getUserById(int id) async {
-    final url = "https://reqres.in/api/users/$id";
-    var response = await dio.get(url);
+    var response = await dio.get("/users/$id");
 
-    final data = response.data["data"];
-    return ProfileModel.fromJson(data);
+    if (response.statusCode == 200) {
+      final data = response.data["data"];
+      return ProfileModel.fromJson(data);
+    } else if (response.statusCode == 404) {
+      throw EmptyException(message: "Data not found - Error 404");
+    } else {
+      throw GeneralException(message: "Cannot get data");
+    }
   }
 }

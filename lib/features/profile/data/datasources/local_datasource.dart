@@ -7,19 +7,17 @@ abstract class ProfileLocalDatasource {
 }
 
 class ProfileLocalDataSourceImplementation extends ProfileLocalDatasource {
-  final HiveCollection hive;
+  final Box box;
 
-  ProfileLocalDataSourceImplementation({required this.hive});
+  ProfileLocalDataSourceImplementation({required this.box});
 
   @override
   Future<List<ProfileModel>> getAllUser(int page) async {
-    var box = Hive.box('profile_box');
     return box.get("getAllUser");
   }
 
   @override
   Future<ProfileModel> getUserById(int id) async {
-    var box = Hive.box('profile_box');
     return box.get("getUserById");
   }
 }

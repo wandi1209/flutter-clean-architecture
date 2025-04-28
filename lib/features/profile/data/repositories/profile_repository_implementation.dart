@@ -11,12 +11,12 @@ import 'package:hive/hive.dart';
 class ProfileRepositoryImplementation extends ProfileRepository {
   final ProfileRemoteDatasource remoteDatasource;
   final ProfileLocalDatasource localDatasource;
-  final HiveInterface hive;
+  final Box box;
 
   ProfileRepositoryImplementation({
     required this.remoteDatasource,
     required this.localDatasource,
-    required this.hive,
+    required this.box,
   });
 
   @override
@@ -29,7 +29,6 @@ class ProfileRepositoryImplementation extends ProfileRepository {
         return Right(hasil);
       } else {
         List<ProfileModel> hasil = await remoteDatasource.getAllUser(page);
-        var box = hive.box("profile_box");
         box.put("getAllUser", hasil);
         return Right(hasil);
       }
@@ -48,7 +47,6 @@ class ProfileRepositoryImplementation extends ProfileRepository {
         return Right(hasil);
       } else {
         Profile hasil = await remoteDatasource.getUserById(id);
-        var box = hive.box("profile_box");
         box.put("getUserById", hasil);
         return Right(hasil);
       }

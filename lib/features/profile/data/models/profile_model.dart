@@ -1,8 +1,17 @@
+import 'package:hive/hive.dart';
+
 import '../../domain/entities/profile.dart';
 
+part 'profile_model.g.dart'; // file generator dari hive_generator <-- ProfileModelAdapter
+
+@HiveType(typeId: 1)
+
 class ProfileModel extends Profile {
+  @HiveField(4)
   final String firstName;
+  @HiveField(5)
   final String lastName;
+  @HiveField(6)
   final String avatar;
 
   const ProfileModel({

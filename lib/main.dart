@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:clean_architecture/features/profile/data/models/profile_model.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'observer.dart';
 
 import 'core/routes/app_router.dart';
@@ -7,6 +9,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
+  await Hive.initFlutter();
+  Hive.registerAdapter(ProfileModelAdapter());
   Bloc.observer = Observer();
   runApp(const MyApp());
 }

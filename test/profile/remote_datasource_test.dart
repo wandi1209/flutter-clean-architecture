@@ -1,9 +1,31 @@
+// INSTRUCTION FOR GENERATE COVERAGE
+
+// >> flutter pub get
+// >> dart run build_runner build --delete-conflicting-outputs
+// >> flutter test --machine > tests.output
+
+// TEST SEMUA FOLDER
+// >> flutter test --coverage
+
+// TEST SPESIFIK FOLDER
+// >> flutter test test/profile --coverage
+
+// GENERATE HTML DARI HASIL TEST COVERAGE
+// >> genhtml coverage/lcov.info -o coverage/html --legend -t "Clean Architecture" --function-coverage
+
+// OPEN HTML
+// >> open coverage/html/index.html
+
+// REMOVE
+// >> lcov --remove coverage/lcov.info "core/errors/*" "features/profile/data/models/*" -o coverage/lcov.info
+
 // Mock -> Class ProfileRemoteDatasource
 
 import 'package:clean_architecture/core/errors/exception.dart';
 import 'package:clean_architecture/features/profile/data/datasources/remote_datasource.dart';
 import 'package:clean_architecture/features/profile/data/models/profile_model.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,6 +35,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'remote_datasource_test.mocks.dart';
 
 void main() async {
+  await dotenv.load();
   MockDio mockDio = MockDio();
   // Create mock object.
   var remoteDatasource = MockProfileRemoteDatasource();
@@ -40,6 +63,28 @@ void main() async {
     lastName: "$userId",
     avatar: "https://image.com/$userId",
   );
+
+  group("DIO TESTING", () {
+    test('TES PASSING DIO', () {
+      // Verifikasi kalau dio yang di-passing ke constructor adalah mockDio
+      expect(remoteDatasourceImplementation.dio, isA<Dio>());
+    });
+
+    test('TEST DEFAULT DIO CONFIGURATION', () {
+      // Stubbing Proccess
+      when(mockDio.options).thenReturn(
+        BaseOptions(
+          baseUrl: "https://reqres.in/api",
+          headers: {"x-api-key": "fake-api-key"},
+        ),
+      );
+      // Verifikasi BaseOptions di Dio
+      var options = remoteDatasourceImplementation.dio.options;
+      expect(options.baseUrl, "https://reqres.in/api");
+      expect(options.headers["x-api-key"], "fake-api-key");
+      expect(options.validateStatus, isNotNull);
+    });
+  });
 
   group("Profile Remote Datasource", () {
     group("getUserById", () {
@@ -137,9 +182,7 @@ void main() async {
         );
 
         try {
-          await remoteDatasourceImplementation.getUserById(
-            userId,
-          );
+          await remoteDatasourceImplementation.getUserById(userId);
           // TIDAK MUNGKIN TERJADI
           fail("TIDAK MUNGKIN TERJADI");
         } catch (e) {
@@ -157,9 +200,7 @@ void main() async {
         );
 
         try {
-          await remoteDatasourceImplementation.getUserById(
-            userId,
-          );
+          await remoteDatasourceImplementation.getUserById(userId);
           // TIDAK MUNGKIN TERJADI
           fail("TIDAK MUNGKIN TERJADI");
         } catch (e) {
@@ -214,7 +255,7 @@ void main() async {
           // TIDAK MUNGKIN TERJADI
           fail("TIDAK MUNGKIN TERJADI");
         }
-       });
+      });
       test("GAGAL (404)", () async {
         // Proses Stubbing
         when(mockDio.get(urlGetAllUser)).thenAnswer(

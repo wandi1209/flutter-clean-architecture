@@ -1,4 +1,4 @@
-import 'package:clean_architecture/features/profile/data/models/profile_model.dart';
+import '../models/profile_model.dart';
 import 'package:hive/hive.dart';
 
 abstract class ProfileLocalDatasource {

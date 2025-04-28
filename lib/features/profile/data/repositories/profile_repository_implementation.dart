@@ -1,9 +1,9 @@
-import 'package:clean_architecture/core/errors/failure.dart';
-import 'package:clean_architecture/features/profile/data/datasources/local_datasource.dart';
-import 'package:clean_architecture/features/profile/data/datasources/remote_datasource.dart';
-import 'package:clean_architecture/features/profile/data/models/profile_model.dart';
-import 'package:clean_architecture/features/profile/domain/entities/profile.dart';
-import 'package:clean_architecture/features/profile/domain/repositories/profile_repository.dart';
+import '../../../../core/errors/failure.dart';
+import '../datasources/local_datasource.dart';
+import '../datasources/remote_datasource.dart';
+import '../models/profile_model.dart';
+import '../../domain/entities/profile.dart';
+import '../../domain/repositories/profile_repository.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hive/hive.dart';

@@ -1,4 +1,4 @@
-import 'package:clean_architecture/features/profile/domain/entities/profile.dart';
+import '../../domain/entities/profile.dart';
 
 class ProfileModel extends Profile {
   final String firstName;

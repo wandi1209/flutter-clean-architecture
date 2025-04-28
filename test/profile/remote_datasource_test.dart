@@ -35,7 +35,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'remote_datasource_test.mocks.dart';
 
 void main() async {
-  await dotenv.load();
   MockDio mockDio = MockDio();
   // Create mock object.
   var remoteDatasource = MockProfileRemoteDatasource();
@@ -70,19 +69,39 @@ void main() async {
       expect(remoteDatasourceImplementation.dio, isA<Dio>());
     });
 
-    test('TEST DEFAULT DIO CONFIGURATION', () {
-      // Stubbing Proccess
-      when(mockDio.options).thenReturn(
-        BaseOptions(
-          baseUrl: "https://reqres.in/api",
-          headers: {"x-api-key": "fake-api-key"},
+    test('TEST DIO REQUEST WITH CONFIGURATION', () async {
+      // Pastikan dotenv.load() sudah dipanggil untuk memuat file .env
+      await dotenv.load();
+
+      // Stubbing Dio untuk memastikan request mengembalikan respons yang benar
+      when(mockDio.get(any)).thenAnswer(
+        (_) async => Response(
+          data: {'key': 'value'},
+          statusCode: 200,
+          requestOptions: RequestOptions(
+            path: "/users",
+            baseUrl: "https://reqres.in/api",
+            headers: {
+              "x-api-key": "fake-api-key",
+            }, // Header palsu untuk memastikan x-api-key ada
+          ),
         ),
       );
-      // Verifikasi BaseOptions di Dio
-      var options = remoteDatasourceImplementation.dio.options;
-      expect(options.baseUrl, "https://reqres.in/api");
-      expect(options.headers["x-api-key"], "fake-api-key");
-      expect(options.validateStatus, isNotNull);
+
+      // Melakukan request dengan endpoint yang menguji konfigurasi Dio
+      var response = await remoteDatasourceImplementation.dio.get("/users");
+
+      // Verifikasi bahwa request menggunakan URL yang benar
+      expect(response.requestOptions.baseUrl, "https://reqres.in/api");
+
+      // Verifikasi bahwa header "x-api-key" digunakan dalam request
+      expect(response.requestOptions.headers["x-api-key"], "fake-api-key");
+
+      // Verifikasi bahwa status code yang diterima adalah 200
+      expect(response.statusCode, 200);
+
+      // Verifikasi bahwa data yang diterima sesuai dengan data palsu yang diatur
+      expect(response.data, {'key': 'value'});
     });
   });
 

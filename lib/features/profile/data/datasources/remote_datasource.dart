@@ -1,5 +1,5 @@
-import 'package:clean_architecture/core/errors/exception.dart';
-import 'package:clean_architecture/features/profile/data/models/profile_model.dart';
+import '../../../../core/errors/exception.dart';
+import '../models/profile_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -49,9 +49,9 @@ class ProfileRemoteDataSourceImplementation extends ProfileRemoteDatasource {
       final data = response.data["data"];
       return ProfileModel.fromJson(data);
     } else if (response.statusCode == 404) {
-      throw EmptyException(message: "Data not found - Error 404");
+      throw const EmptyException(message: "Data not found - Error 404");
     } else {
-      throw GeneralException(message: "Cannot get data");
+      throw const GeneralException(message: "Cannot get data");
     }
   }
 }

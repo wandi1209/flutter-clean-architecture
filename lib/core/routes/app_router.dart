@@ -1,6 +1,7 @@
+import 'package:go_router/go_router.dart';
+
 import '../../features/profile/presentation/pages/all_user_page.dart';
 import '../../features/profile/presentation/pages/detail_user_page.dart';
-import 'package:go_router/go_router.dart';
 
 class AppRouter {
   get router => GoRouter(

@@ -1,5 +1,6 @@
-import 'package:bloc/bloc.dart';
-import 'package:clean_architecture/injection.dart';
+
+import 'injection.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'observer.dart';
 

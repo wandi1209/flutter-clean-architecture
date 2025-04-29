@@ -1,12 +1,13 @@
-import '../../../../core/errors/failure.dart';
-import '../datasources/local_datasource.dart';
-import '../datasources/remote_datasource.dart';
-import '../models/profile_model.dart';
-import '../../domain/entities/profile.dart';
-import '../../domain/repositories/profile_repository.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hive/hive.dart';
+
+import '../../../../core/errors/failure.dart';
+import '../../domain/entities/profile.dart';
+import '../../domain/repositories/profile_repository.dart';
+import '../datasources/local_datasource.dart';
+import '../datasources/remote_datasource.dart';
+import '../models/profile_model.dart';
 
 class ProfileRepositoryImplementation extends ProfileRepository {
   final ProfileRemoteDatasource remoteDatasource;

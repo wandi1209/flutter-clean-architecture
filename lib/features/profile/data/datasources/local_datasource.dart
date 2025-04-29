@@ -1,5 +1,6 @@
-import '../models/profile_model.dart';
 import 'package:hive/hive.dart';
+
+import '../models/profile_model.dart';
 
 abstract class ProfileLocalDatasource {
   Future<List<ProfileModel>> getAllUser(int page);

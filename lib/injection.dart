@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -18,7 +19,15 @@ Future<void> init() async {
   // HIVE
   Hive.registerAdapter(ProfileModelAdapter());
   var box = await Hive.openBox("profile_box");
-  final Dio dio = Dio();
+  final Dio dio = Dio(
+            BaseOptions(
+              baseUrl: "https://reqres.in/api",
+              headers: {"x-api-key": dotenv.env["API_KEY"]},
+              validateStatus: (status) {
+                return status! < 500;
+              },
+            ),
+          );
 
   locator.registerLazySingleton(() => box);
   locator.registerLazySingleton(() => dio);
@@ -51,6 +60,6 @@ Future<void> init() async {
     () => ProfileLocalDataSourceImplementation(box: locator()),
   );
   locator.registerLazySingleton<ProfileRemoteDatasource>(
-    () => ProfileRemoteDataSourceImplementation(dio: locator()),
+    () => ProfileRemoteDataSourceImplementation(dio),
   );
 }

@@ -1,7 +1,6 @@
 import '../../../../core/errors/exception.dart';
 import '../models/profile_model.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 abstract class ProfileRemoteDatasource {
   Future<List<ProfileModel>> getAllUser(int page);
@@ -11,18 +10,7 @@ abstract class ProfileRemoteDatasource {
 class ProfileRemoteDataSourceImplementation extends ProfileRemoteDatasource {
   final Dio dio;
 
-  ProfileRemoteDataSourceImplementation({Dio? dio})
-    : dio =
-          dio ??
-          Dio(
-            BaseOptions(
-              baseUrl: "https://reqres.in/api",
-              headers: {"x-api-key": dotenv.env["API_KEY"]},
-              validateStatus: (status) {
-                return status! < 500;
-              },
-            ),
-          );
+  ProfileRemoteDataSourceImplementation(this.dio);
 
   @override
   Future<List<ProfileModel>> getAllUser(int page) async {

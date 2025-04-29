@@ -39,7 +39,7 @@ void main() async {
   // Create mock object.
   var remoteDatasource = MockProfileRemoteDatasource();
   var remoteDatasourceImplementation = ProfileRemoteDataSourceImplementation(
-    dio: mockDio,
+    mockDio,
   );
 
   const userId = 1;
